@@ -29,6 +29,7 @@
                 codeReader.decodeFromVideoDevice(null, 'video', (result, error) => {
                     if (result) {
                     alert(result.text);
+                    console.log(result.text);
                     }
                     if (error && !(error instanceof ZXing.NotFoundException)) {
                     console.error(error);
