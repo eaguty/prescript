@@ -1,0 +1,46 @@
+<html>
+    <head>
+        <title>Prescript MEX</title>
+        <script src="https://unpkg.com/@zxing/library@latest"></script>
+        <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+        <script src="lib.js"></script>
+        <style>
+            #video {
+                position: absolute;
+                top: 0;
+                left: 0;
+                z-index: -1;
+                }
+        </style>
+    </head>
+    <body>
+        <video id="video" width="300" height="300"></video>
+        <button id="startButton">Start Scanning</button>
+        <script>
+            const codeReader = new ZXing.BrowserQRCodeReader();
+            const video = document.getElementById('video');
+            const startButton = document.getElementById('startButton');
+
+            startButton.addEventListener('click', () => {
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => {
+                video.srcObject = stream;
+                video.play();
+                codeReader.decodeFromVideoDevice(null, 'video', (result, error) => {
+                    if (result) {
+                    alert(result.text);
+                    }
+                    if (error && !(error instanceof ZXing.NotFoundException)) {
+                    console.error(error);
+                    alert('An error occurred while scanning. Please try again.');
+                    }
+                });
+                })
+                .catch(error => {
+                console.error(error);
+                alert('An error occurred while accessing the camera. Please make sure you have granted camera access and try again.');
+                });
+            });
+        </script>
+    </body>
+</html>
